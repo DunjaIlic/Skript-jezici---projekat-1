@@ -162,6 +162,7 @@ function getAllUsers(token, schema) {
 
 function showProduct(data) {
     const id = data.target.dataset.id
+    document.getElementById("showProductInModal").innerHTML = ''
     fetch("http://localhost:8000/admin/orderitems" + `/${id}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -169,6 +170,7 @@ function showProduct(data) {
     })
         .then(res => res.json())
         .then(data => {
+            console.log("ITEMS: ", data);
             var str = ""
             data.forEach(orderItem => {
                 fetch("http://localhost:8000/admin/products" + `/${orderItem.ProductId}`, {

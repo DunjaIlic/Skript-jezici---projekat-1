@@ -24,7 +24,7 @@ route.get('/productdetails/:id', (req, res) => {
 
 route.post('/productdetails', (req, res) => {
     
-    ProductDetails.create({ price: req.body.price, quantity: req.body.quantity })
+    ProductDetails.create({ price: req.body.price, quantity: req.body.quantity, MeasureId: req.body.MeasureId, ProductId: req.body.ProductId })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
 

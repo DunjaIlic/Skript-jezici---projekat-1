@@ -16,7 +16,7 @@ route.get('/orderitems', (req, res) => {
 
 route.get('/orderitems/:id', (req, res) => {
 
-    OrderItems.findOne({ where: { id: req.params.id } })
+    OrderItems.findAll({ where: { ProductId: req.params.id } })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
 

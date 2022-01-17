@@ -25,7 +25,7 @@ route.get('/order/:id', (req, res) => {
 
 route.post('/order', (req, res) => {
     
-    Order.create({}) //?
+    Order.create({UserId: req.body.UserId}) //?
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
 

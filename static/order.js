@@ -6,7 +6,7 @@ function init() {
 
     const schema = {
         api_url: "http://localhost:8000/admin/order",
-        properties: ['id', 'price', 'quantity', 'MeasureId', 'ProductId'],
+        properties: ['id', 'UserId', 'Order items'],
 
 
     }
@@ -128,10 +128,10 @@ function getAllUsers(token, schema) {
             data.forEach(el => {
                 str += `<tr>`
                 schema.properties.forEach(element => {
-                    str += element == 'ProductId' ? `
+                    str += element == 'Order items' ? `
                  <td>
-                  <button type="button"  class="btn showProduct btn-primary" data-toggle="modal" data-id=${el[element]} data-target="#exampleModalLong">
-                    Show product
+                  <button type="button"  class="btn showProduct btn-primary" data-toggle="modal" data-id=${el['id']} data-target="#exampleModalLong">
+                    Show items
                   </button> </td>
                   
                   `
@@ -162,23 +162,35 @@ function getAllUsers(token, schema) {
 
 function showProduct(data) {
     const id = data.target.dataset.id
-    fetch("http://localhost:8000/admin/products" + `/${id}`, {
+    fetch("http://localhost:8000/admin/orderitems" + `/${id}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
     })
         .then(res => res.json())
         .then(data => {
-            document.getElementById("showProductInModal").innerHTML =
-                `
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"> ${data.name}</h5>
-                        <p class="card-text"> ${data.type}</p>
-                        <a href="#" class="btn btn-primary">Details</a>
-                    </div>
-                </div>
-            `;
+            var str = ""
+            data.forEach(orderItem => {
+                fetch("http://localhost:8000/admin/products" + `/${orderItem.ProductId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        document.getElementById("showProductInModal").innerHTML += `
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text"><b>Name:</b>  ${data.name}</p>
+                                    <p class="card-text"><b>Type:</b>  ${data.type}</p>
+                                    <p class="card-text"><b>Quantity: </b> ${orderItem.count} </p>
+                                </div>
+                            </div>
+                        `
+                    })
+            });
+
         })
 
 }

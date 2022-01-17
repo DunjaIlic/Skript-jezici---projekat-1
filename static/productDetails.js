@@ -5,8 +5,8 @@ function init() {
     const token = localStorage.getItem('token');
 
     const schema = {
-        api_url: "http://localhost:8000/admin/users",
-        properties: ['id', 'firstName', 'lastName', 'email', 'username', 'password'],
+        api_url: "http://localhost:8000/admin/productdetails",
+        properties: ['id', 'price', 'quantity', 'MeasureId', 'ProductId'],
 
 
     }
@@ -15,11 +15,11 @@ function init() {
     createFrom(schema)
     getAllUsers(token, schema)
 
-
     document.getElementById('usrBtnAdd').addEventListener('click', e => {
         e.preventDefault();
 
         const data = prepareDataForHttp(schema)
+        console.log("DATA", data);
         clearInputs(schema)
 
         fetch(schema.api_url, {
@@ -35,7 +35,7 @@ function init() {
                 if (el.msg) {
                     alert(el.msg);
                 } else {
-                    document.getElementById('usrLst').innerHTML += buildOneRow(el)
+                    getAllUsers(token, schema)
                 }
             });
     });
@@ -47,7 +47,7 @@ function init() {
         const data = prepareDataForHttp(schema)
         clearInputs(schema);
 
-        fetch('http://localhost:8000/admin/users/' + data.id, {
+        fetch(schema.api_url + "/" + data.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ function init() {
 
         const id = document.getElementById("id").value;
 
-        fetch('http://localhost:8000/admin/users/' + id, {
+        fetch(schema.api_url + "/" + id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ function init() {
                 if (el.msg) {
                     alert(el.msg);
                 } else {
-                    getAllUsers(token,schema)
+                    getAllUsers(token, schema)
                 }
             });
     });
@@ -126,19 +126,64 @@ function getAllUsers(token, schema) {
             console.log(data);
             var str = ""
             data.forEach(el => {
-                str += `
-                <tr>
-                    <th scope="row">${el.id}</th>
-                    <td>${el.firstName}</td>
-                    <td>${el.lastName}</td>
-                    <td>${el.email}</td>
-                    <td>${el.username}</td>
-                </tr>`;
+                str += `<tr>`
+                schema.properties.forEach(element => {
+                    str += element == 'ProductId' ? `
+                 <td>
+                  <button type="button"  class="btn showProduct btn-primary" data-toggle="modal" data-id=${el[element]} data-target="#exampleModalLong">
+                    Show product
+                  </button> </td>
+                  
+                  `
+                        : `<td>${el[element]}</td>`
+                });
+
+
+                // <th scope="row">${el.id}</th>
+                // <td>${el.firstName}</td>
+                // <td>${el.lastName}</td>
+                // <td>${el.email}</td>
+                // <td>${el.username}</td>
+                str += `</tr>`;
             });
             document.getElementById('usrLst').innerHTML = str
+            var elements = document.getElementsByClassName("showProduct")
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].addEventListener('click', showProduct, false);
+            }
+
         });
 
 }
+
+
+
+
+
+function showProduct(data) {
+    const id = data.target.dataset.id
+    fetch("http://localhost:8000/admin/products" + `/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("showProductInModal").innerHTML =
+                `
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"> ${data.name}</h5>
+                        <p class="card-text"> ${data.type}</p>
+                        <a href="#" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+            `;
+        })
+
+}
+
+
 
 function prepareDataForHttp(schema) {
     const data = {}

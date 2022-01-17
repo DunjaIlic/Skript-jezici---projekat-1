@@ -16,7 +16,7 @@ route.get('/productdetails', (req, res) => {
 
 route.get('/productdetails/:id', (req, res) => {
 
-    Users.findOne({ where: { id: req.params.id } })
+    ProductDetails.findOne({ where: { id: req.params.id } })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
 
@@ -24,7 +24,7 @@ route.get('/productdetails/:id', (req, res) => {
 
 route.post('/productdetails', (req, res) => {
     
-    Users.create({ price: req.body.price, quantity: req.body.quantity })
+    ProductDetails.create({ price: req.body.price, quantity: req.body.quantity })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
 

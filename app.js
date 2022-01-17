@@ -1,6 +1,9 @@
 const express = require('express');
 const { sequelize } = require('./models');
 const user = require('./RestService/user');
+const productDetails = require('./RestService/productDetails');
+const product = require('./RestService/product');
+
 const path = require('path');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -8,6 +11,8 @@ require('dotenv').config();
 const app = express();
 
 app.use('/admin', user);
+app.use('/admin', product)
+app.use('/admin', productDetails)
 
 function getCookies(req) {
     if (req.headers.cookie == null) return {};

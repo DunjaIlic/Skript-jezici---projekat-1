@@ -3,6 +3,7 @@ const { sequelize } = require('./models');
 const user = require('./RestService/user');
 const productDetails = require('./RestService/productDetails');
 const product = require('./RestService/product');
+const order = require('./RestService/order');
 
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -13,6 +14,7 @@ const app = express();
 app.use('/admin', user);
 app.use('/admin', product)
 app.use('/admin', productDetails)
+app.use('/order', product)
 
 function getCookies(req) {
     if (req.headers.cookie == null) return {};

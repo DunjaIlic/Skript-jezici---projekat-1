@@ -14,9 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate({OrderItems}) {
       this.hasMany(OrderItems)
     }
+
+    
   };
   Order.init({
-    orderId: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Order',

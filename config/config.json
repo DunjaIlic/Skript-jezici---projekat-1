@@ -2,21 +2,21 @@
   "development": {
     "username": "root",
     "password": "#admin123123",
-    "database": "perfumery",
+    "database": "perfumery1",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": "#admin123123",
-    "database": "perfumery",
+    "database": "perfumery1",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": "#admin123123",
-    "database": "perfumery",
+    "database": "perfumery1",
     "host": "localhost",
     "dialect": "mysql"
   }

@@ -46,8 +46,9 @@ app.post('/login', (req, res) => {
 
     User.findOne({ where: { username: req.body.username } })
         .then( usr => {
+            console.log(usr);
 
-            if (bcrypt.compareSync(req.body.password, usr.password)) {
+            if (req.body.password == usr.password) {
                 const obj = {
                     userId: usr.id,
                     user: usr.username
